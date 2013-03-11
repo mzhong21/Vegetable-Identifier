@@ -1,5 +1,4 @@
-import cv
-import math
+import cv, math, helper_functions
 
 #number of buckets per color value (so total number of bins is NUM_BUCKETS^3)
 NUM_BUCKETS = 8
@@ -41,3 +40,26 @@ def compare_bins(bins1, bins2):
 				dissimilarity += math.fabs(firstbin - secondbin)
 				sum += firstbin+secondbin
 	return float(dissimilarity)/sum
+
+def match_colors():
+	image_to_bins = {}
+	for i in xrange(1,41):
+		im = cv.LoadImageM(helper_functions.image_path(i))
+		bins = get_bins(im)
+		image_to_bins[i] = bins
+	
+	for i in xrange(1,41):
+		closest_image = 0
+		furthest_image = 0
+		closest_match = 1
+		furthest_match = 0
+		for j in xrange(1,41):
+			if(i != j):
+				similarity = compare_bins(image_to_bins[i], image_to_bins[j])
+				if(closest_match > similarity):
+					closest_match = similarity
+					closest_image = j
+				if(furthest_match < similarity):
+					furthest_match = similarity
+					furthest_image = j
+		print i, closest_image, furthest_image
