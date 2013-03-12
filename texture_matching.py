@@ -34,26 +34,4 @@ def compare_bins(hist1,hist2):
 	for i in xrange(NUM_BINS):
 		dissimilarity += math.fabs(hist1[i]-hist2[i])
 		sum += hist1[i]+hist2[i]
-	return float(dissimilarity)/sum		
-
-def match_textures():
-	image_to_bins = {}
-	for i in xrange(1,41):
-		im = cv.LoadImageM(helper_functions.image_path(i))
-		grayImage = grayscale_image(im)
-		image_to_bins[i] = get_bins(grayImage)
-	for i in xrange(1,41):
-		bestImage = 0
-		worstImage = 0
-		closestMatch = 1
-		worstMatch = 0
-		for j in xrange(1,41):
-			if i != j:
-				similarity = compareHistograms(image_to_bins[i],image_to_bins[j])
-				if closestMatch > similarity:
-					bestImage = j
-					closestMatch = similarity
-				if worstMatch < similarity:
-					worstImage = j
-					worstMatch = similarity
-		print i, bestImage, worstImage
+	return float(dissimilarity)/sum

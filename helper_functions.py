@@ -1,5 +1,7 @@
 import cv, color_matching, texture_matching
 
+magic_r = 0.25
+
 def image_path(num):
 	path = "./images/i"
 	if(num < 10):
@@ -7,6 +9,12 @@ def image_path(num):
 	else:
 		path = path + str(num) + ".jpg"
 	return path
+	
+def getSimilarity(colorSimilarity, textureSimilarity):
+	return magic_r*textureSimilarity+(1-magic_r)*colorSimilarity
+
+def printOutputs(image, bestImage,worstImage):
+	print image, bestImage, worstImage
 
 def findMatches(image_to_bins_colors, image_to_bins_texture):
 	for i in xrange(1,41):
@@ -18,14 +26,14 @@ def findMatches(image_to_bins_colors, image_to_bins_texture):
 			if i != j:
 				colorSimilarity = color_matching.compare_bins(image_to_bins_colors[i],image_to_bins_colors[j])
 				textureSimilarity = texture_matching.compare_bins(image_to_bins_texture[i], image_to_bins_texture[j])
-				similarity = colorSimilarity
+				similarity = getSimilarity(colorSimilarity,textureSimilarity)
 				if closestMatch > similarity:
 					bestImage = j
 					closestMatch = similarity
 				if worstMatch < similarity:
 					worstImage = j
 					worstMatch = similarity
-		print i, bestImage, worstImage
+		printOutputs(i, bestImage, worstImage)
 
 def go_through_images():
 	image_to_bins_colors = {}
